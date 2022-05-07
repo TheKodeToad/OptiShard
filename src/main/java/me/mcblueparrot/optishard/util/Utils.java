@@ -48,15 +48,15 @@ public class Utils {
 		return result;
 	}
 
-	public static boolean isValidJar(File out) {
+	public static boolean isValidJar(File filed) {
 		try {
-			new JarFile(out).close();
+			new JarFile(filed).close();
 		}
 		catch(IOException error) {
 			return false;
 		}
 
-		return true;
+		return filed.exists();
 	}
 
 	public static File getMinecraftJar() throws ClassNotFoundException, URISyntaxException {

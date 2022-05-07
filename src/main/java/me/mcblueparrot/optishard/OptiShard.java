@@ -3,17 +3,24 @@ package me.mcblueparrot.optishard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.github.glassmc.loader.api.GlassLoader;
 import com.github.glassmc.loader.api.Listener;
@@ -54,23 +61,59 @@ public class OptiShard implements Listener {
 
 			OptiFineVersion version = optionalVersion.get();
 
-			File out = new File(optiFineFolder, version.getFilename());
-			File mod = new File(optiFineFolder, version.getFilename().substring(0, version.getFilename().lastIndexOf(".")) + "-Mod.jar");
+			String base = version.getFilename().substring(0, version.getFilename().lastIndexOf("."));
 
-			if(!Utils.isValidJar(out)) {
+			File optiFineInstaller = new File(optiFineFolder, version.getFilename());
+			File mod = new File(optiFineFolder, base + "-Mod.jar");
+
+			if(!Utils.isValidJar(optiFineInstaller)) {
 				URL url = version.getDownloadURL();
-				Utils.download(url, out);
+				Utils.download(url, optiFineInstaller);
 			}
 
 			try {
 				optiFine = new JarFile(mod);
 			}
 			catch(IOException error) {
-				URLClassLoader classLoader = new URLClassLoader(new URL[] { out.toURI().toURL() }, null);
+				URLClassLoader classLoader = new URLClassLoader(new URL[] { optiFineInstaller.toURI().toURL() }, null);
 				Class<?> patcher = Class.forName("optifine.Patcher", false, classLoader);
 				Method processMethod = patcher.getMethod("process", File.class, File.class, File.class);
-				processMethod.invoke(processMethod, Utils.getMinecraftJar(), out, mod);
+				processMethod.invoke(processMethod, Utils.getMinecraftJar(), optiFineInstaller, mod);
 				optiFine = new JarFile(mod);
+			}
+
+			if(optiFine.getJarEntry("notch/net/optifine/Config.class") != null) {
+				File notchMod = new File(optiFineFolder, base + "-Mod-Notch.jar");
+				try {
+					optiFine = new JarFile(notchMod);
+				}
+				catch(IOException error) {
+					try(FileOutputStream out = new FileOutputStream(notchMod);
+							ZipOutputStream zipOut = new ZipOutputStream(out)) {
+						Enumeration<JarEntry> entries = optiFine.entries();
+
+						while(entries.hasMoreElements()) {
+							JarEntry entry = entries.nextElement();
+							String name = entry.getName();
+
+							if(name.startsWith("notch/")) {
+								name = name.substring(6);
+							}
+							else if(name.startsWith("srg/")) {
+								continue;
+							}
+
+							InputStream entryInput = optiFine.getInputStream(entry);
+
+							zipOut.putNextEntry(new ZipEntry(name));
+							IOUtils.copy(entryInput, zipOut);
+
+							entryInput.close();
+						}
+					}
+					optiFine = new JarFile(notchMod);
+				}
+				mod = notchMod;
 			}
 
 			((GlassLoaderImpl) GlassLoader.getInstance()).addURL(mod);
