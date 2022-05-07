@@ -1,0 +1,8 @@
+namespace = "com.github.glassmc.example.client"
+
+implementations = [
+    "1.7.10",
+    "1.8.9",
+    "1.17.1",
+    "1.18.1"
+]

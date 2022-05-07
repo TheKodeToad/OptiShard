@@ -1,0 +1,58 @@
+import com.github.glassmc.kiln.standard.MixinRemapper
+import com.github.glassmc.kiln.standard.environment.GlassLoaderEnvironment
+
+buildscript {
+    repositories {
+        mavenCentral()
+
+        maven {
+            url = 'https://jitpack.io/'
+        }
+        maven {
+            url = 'https://glassmc.ml/repository/'
+        }
+    }
+
+    dependencies {
+        classpath 'com.github.glassmc:kiln:0.8.10'
+    }
+}
+
+apply plugin: 'kiln-main'
+
+group = "com.github.glassmc"
+version = "1.0"
+
+sourceCompatibility = targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url = 'https://glassmc.ml/repository/'
+    }
+
+    maven {
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+
+    maven {
+        url = 'https://jitpack.io/'
+    }
+}
+
+dependencies {
+    shadowImplementation 'com.github.glassmc:loader:0.9.9'
+
+    implementation 'com.github.glassmc:mixin:c5ecf5aa4a:mapped'
+
+    compileOnly 'net.minecraft:client-1.7.10:yarn'
+    compileOnly 'net.minecraft:client-1.8.9:mcp'
+    compileOnly 'net.minecraft:client-1.17.1:yarn'
+    compileOnly 'net.minecraft:client-1.18.2:mojang'
+}
+
+kiln {
+    transformers = [new MixinRemapper()]
+    environment = new GlassLoaderEnvironment("0.9.9")
+}
