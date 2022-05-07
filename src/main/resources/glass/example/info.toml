@@ -1,6 +1,0 @@
-id = "example"
-version = "0.6.0"
-
-implementations = [
-    "client"
-]

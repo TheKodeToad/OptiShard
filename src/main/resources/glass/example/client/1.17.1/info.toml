@@ -1,8 +1,0 @@
-namespace = "com.github.glassmc.example.client.v1_17_1"
-
-[listeners]
-initialize = "ExampleInitializeListener"
-
-[environment]
-    [environment.has]
-    client = "1.17.1"
