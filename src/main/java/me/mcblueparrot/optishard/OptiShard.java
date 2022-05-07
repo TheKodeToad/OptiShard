@@ -74,9 +74,6 @@ public class OptiShard implements Listener {
 			}
 
 			((GlassLoaderImpl) GlassLoader.getInstance()).addURL(mod);
-
-			Class.forName("javax.vecmath.Matrix4f", true,  GlassLoaderImpl.class.getClassLoader());
-
 			GlassLoader.getInstance().registerTransformer(OptiFineTransformer.class);
 		}
 		catch(Throwable error) {
