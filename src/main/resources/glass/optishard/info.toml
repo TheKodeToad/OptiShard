@@ -1,0 +1,6 @@
+id = "optishard"
+version = "1.0.0"
+namespace = "me.mcblueparrot.optishard"
+
+[listeners]
+initialize = "OptiShard"

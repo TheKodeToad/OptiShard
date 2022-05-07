@@ -1,6 +1,13 @@
 # IntelliJ
 .idea
 
+# Eclipse
+.settings/
+.project
+.classpath
+*.launch
+bin
+
 # Gradle
 .gradle
 build

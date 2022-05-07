@@ -1,10 +1,19 @@
-import com.github.glassmc.kiln.standard.MixinRemapper
+import com.github.glassmc.kiln.standard.CustomTransformer
 import com.github.glassmc.kiln.standard.environment.GlassLoaderEnvironment
+import org.objectweb.asm.Type
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.AnnotationNode
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.FieldInsnNode
+import org.objectweb.asm.tree.FieldNode
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
 
 buildscript {
     repositories {
         mavenCentral()
 
+        mavenLocal()
         maven {
             url = 'https://jitpack.io/'
         }
@@ -14,7 +23,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.glassmc:kiln:0.8.10'
+        classpath 'com.github.glassmc:kiln:0.8.7'
     }
 }
 
@@ -28,6 +37,7 @@ sourceCompatibility = targetCompatibility = 1.8
 repositories {
     mavenCentral()
 
+    mavenLocal()
     maven {
         url = 'https://glassmc.ml/repository/'
     }
@@ -42,17 +52,9 @@ repositories {
 }
 
 dependencies {
-    shadowImplementation 'com.github.glassmc:loader:0.9.9'
-
-    implementation 'com.github.glassmc:mixin:c5ecf5aa4a:mapped'
-
-    compileOnly 'net.minecraft:client-1.7.10:yarn'
-    compileOnly 'net.minecraft:client-1.8.9:mcp'
-    compileOnly 'net.minecraft:client-1.17.1:yarn'
-    compileOnly 'net.minecraft:client-1.18.2:mojang'
+    implementation 'com.github.glassmc:loader:0.9.5:mapped'
 }
 
 kiln {
-    transformers = [new MixinRemapper()]
-    environment = new GlassLoaderEnvironment("0.9.9")
+    environment = new GlassLoaderEnvironment("0.9.6")
 }
