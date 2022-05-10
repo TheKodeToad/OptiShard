@@ -1,58 +1,9 @@
-# Glass - Example
-A basic shard that demonstrates **optional implementations**, and **interfaces**.
+# OptiShard
+OptiFine running on the Glass mod loader.
 
-# Basic Information
-A lot of stuff will be more complex than other mod loaders, but it should be make easier in the future. Also keep in mind that glass is in design more complex, so there will always be a little more complex.
+## Config
+Found in .minecraft/optifine/config.toml.
 
-**impl directory(s):** Used for optional implementations (in short, sections of code that are only loaded / ran if their dependencies have already been loaded). In this example they are used for applying the shard to multiple versions.
+The `version` property can be the name of the OptiFine version on the downloads page, latest to use the latest stable version for your MC version, or the name of a file in the same folder.
 
-# Setup
-Instructions should be relatively clear, but don't be afraid to ask because there is very likely to be something missing.
-
-## Downloading
-Download / Clone the github repository to get the contents locally.
-
-## Running
-
-### For IntelliJ IDEA Users:
-
-Run
-
-`./gradlew genRunConfiguration -Pconfiguration=idea,{client/server},{version}`
-
-and a run configuration should be created (you will have to go into run configurations and select it)
-
-For example, to generate a run configuration for a 1.8.9 client:
-
-`./gradlew genRunConfiguration -Pconfiguration=idea,client,1.8.9`
-
-### Everyone Else:
-Kiln does not yet support automatically creating run configurations for any other IDEs, so you will have to create one manually.
-
-- **Classpath:** {project-name}
-- **JVM Arguments:** see [jvm arguments](#jvm-arguments)
-- **Main Class:** com.github.glassmc.loader.client.GlassClientMain
-- **Program Arguments:** see [program arguments](#program-arguments)
-- **Working Directory:** run
-
-#### JVM Arguments
-To get the proper jvm arguments, run
-
-`./gradlew getRunConfiguration -Pconfiguration={ide},{client/server},{version}`
-
-For example, to get the correct arguments for running a 1.8.9 client
-
-`./gradlew getRunConfiguration -Pconfiguration=client,1.8.9`
-
-You will see a long string printed into the terminal, copy that and add it to your jvm arguments.
-
-#### Program Arguments
-Most versions will work with supplying
-
-`--accessToken 0 --version {version}`
-
-(for offline mode)
-
-but some versions (at least 1.7.10) require also adding
-
-`--userProperties {}`
+This file will be used as the OptiFine jar mod, which can be obtained from the extract button in the installer.
