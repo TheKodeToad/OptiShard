@@ -86,16 +86,12 @@ public class OptiFineVersion {
 		return result;
 	}
 
+	public static Optional<OptiFineVersion> getVersion(String optiFineVersion) throws IOException {
+		return getVersions().stream().filter((version) -> optiFineVersion.equals(version.filename) || optiFineVersion.equals(version.name)).findFirst();
+	}
+
 	public static Optional<OptiFineVersion> getNewestForMinecraftVersion(String id) throws IOException {
-		List<OptiFineVersion> versions = getVersions();
-
-		for(OptiFineVersion version : versions) {
-			if(version.mcVersion.equals(id)) {
-				return Optional.of(version);
-			}
-		}
-
-		return Optional.empty();
+		return getVersions().stream().filter((version) -> version.mcVersion.equals(id)).findFirst();
 	}
 
 	public URL getDownloadURL() throws IOException {
