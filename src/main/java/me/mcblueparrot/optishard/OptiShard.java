@@ -75,6 +75,7 @@ public class OptiShard implements Listener {
 				}
 
 				mod = new File(optiFineFolder, optiFineVersion);
+				base = mod.getName().substring(0, mod.getName().lastIndexOf("."));
 
 				if(!mod.exists()) {
 					System.err.println("Could not not find OptiFine file: " + mod.getPath());
